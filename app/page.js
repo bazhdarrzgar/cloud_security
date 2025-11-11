@@ -116,7 +116,7 @@ export default function CloudSecurityComparison() {
     setSelectedResources([]);
   };
 
-  const startAgentBasedScan = async () => {
+  const startAgentBasedScan = async (fileChanges = null) => {
     setAgentBasedScanning(true);
     setAgentBasedProgress(0);
     setAgentBasedResults(null);
@@ -135,7 +135,10 @@ export default function CloudSecurityComparison() {
       const response = await fetch('/api/scan/agent-based', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ selectedResources })
+        body: JSON.stringify({ 
+          selectedResources,
+          fileSystemChanges: fileChanges || fileSystemChanges
+        })
       });
       const data = await response.json();
       clearInterval(progressInterval);
