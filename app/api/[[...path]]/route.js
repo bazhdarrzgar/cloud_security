@@ -278,9 +278,64 @@ const securityTests = [
 ];
 
 // Simulate agent-based scanning
-function runAgentBasedScan(environment) {
+function runAgentBasedScan(environment, fileSystemChanges = []) {
   const findings = [];
   const startTime = Date.now();
+  
+  // Add file system change detections first
+  fileSystemChanges.forEach((change, index) => {
+    const isFolder = change.type.includes('folder');
+    const isFile = change.type.includes('file');
+    const isDeleted = change.type.includes('deleted');
+    const isCreated = change.type.includes('created');
+    const isModified = change.type.includes('modified');
+    
+    findings.push({
+      resourceId: 'vm-windows-cloud-preview',
+      resourceName: 'Windows Cloud Environment',
+      resourceType: 'File System',
+      severity: isDeleted ? 'high' : isCreated ? 'medium' : 'low',
+      vulnerability: `file-system-${isFolder ? 'folder' : 'file'}-${isCreated ? 'created' : isDeleted ? 'deleted' : 'modified'}`,
+      vulnerabilityTitle: `${isFolder ? 'Folder' : 'File'} ${isCreated ? 'Created' : isDeleted ? 'Deleted' : 'Modified'}: ${change.itemName}`,
+      description: `Agent-based scan detected ${isFolder ? 'folder' : 'file'} ${isCreated ? 'creation' : isDeleted ? 'deletion' : 'modification'} in the cloud environment. Item: "${change.itemName}" at location: ${change.path}`,
+      testType: 'Real-time File System Monitoring (Agent)',
+      detected: true,
+      detectedBy: 'agent-based',
+      cvss: isDeleted ? 7.5 : isCreated ? 5.5 : 4.0,
+      cve: [],
+      impact: `File system ${isCreated ? 'creation' : isDeleted ? 'deletion' : 'modification'} detected via agent monitoring at ${change.timestamp}. ${isFolder ? 'Folder' : 'File'}: "${change.itemName}". ${isCreated ? 'New item was added to the system which may indicate installation of software, data upload, or configuration changes.' : isDeleted ? 'Item was removed which could indicate data cleanup, unauthorized deletion, or potential security incident.' : 'Item was modified which may indicate updates, configuration changes, or potential tampering.'}`,
+      remediation: [
+        `Verify that the ${isFolder ? 'folder' : 'file'} ${isCreated ? 'creation' : isDeleted ? 'deletion' : 'modification'} was authorized and expected`,
+        'Review access logs to identify the user or process responsible for this change',
+        'Check if this change aligns with your change management policies',
+        'Scan the affected area for any malicious content or unauthorized modifications',
+        'Enable continuous file integrity monitoring (FIM) for critical directories',
+        'Implement approval workflows for file system changes in production environments',
+        'Review and update file system permissions to prevent unauthorized changes',
+        'Set up alerts for suspicious file system activities'
+      ],
+      complianceImpact: [
+        'SOC2 CC6.1 - Logical and Physical Access Controls',
+        'SOC2 CC7.2 - System Monitoring',
+        'ISO 27001 A.12.4.1 - Event Logging', 
+        'ISO 27001 A.18.1.3 - Protection of Records',
+        'NIST 800-53 AU-2 - Event Logging',
+        'NIST 800-53 AU-6 - Audit Review',
+        'NIST 800-53 CM-3 - Configuration Change Control',
+        'PCI-DSS 10.2 - Implement automated audit trails',
+        'GDPR Article 32 - Security of Processing'
+      ],
+      riskScore: isDeleted ? 75 : isCreated ? 55 : 40,
+      resourceDetails: {
+        itemType: isFolder ? 'Folder' : 'File',
+        itemName: change.itemName,
+        path: change.path,
+        changeType: change.type,
+        timestamp: change.timestamp,
+        detectionMethod: 'Agent-based real-time monitoring'
+      }
+    });
+  });
   
   // VMs - Agent can deeply inspect
   environment.vms.forEach(vm => {
