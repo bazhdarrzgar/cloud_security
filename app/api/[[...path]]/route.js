@@ -1883,7 +1883,7 @@ export async function POST(request) {
   if (pathname === '/api/scan/agentless') {
     const { selectedResources } = body;
     const filteredEnvironment = filterEnvironmentBySelection(globalEnvironment, selectedResources);
-    const results = runAgentlessScan(filteredEnvironment, fileSystemChanges);
+    const results = runAgentlessScan(filteredEnvironment);
     return NextResponse.json(results);
   }
   
