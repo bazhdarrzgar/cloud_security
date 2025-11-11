@@ -348,7 +348,7 @@ export default function CloudSecurityComparison() {
                 className="gap-2 bg-purple-50 hover:bg-purple-100 dark:bg-purple-950 dark:hover:bg-purple-900 border-purple-200"
               >
                 <Terminal className="h-4 w-4" />
-                Agent Scanner
+                Agentless Scanner
               </Button>
               <Button 
                 onClick={startBothScans} 
