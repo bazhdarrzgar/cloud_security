@@ -1874,14 +1874,14 @@ export async function POST(request) {
   }
   
   if (pathname === '/api/scan/agent-based') {
-    const { selectedResources } = body;
+    const { selectedResources, fileSystemChanges = [] } = body;
     const filteredEnvironment = filterEnvironmentBySelection(globalEnvironment, selectedResources);
-    const results = runAgentBasedScan(filteredEnvironment);
+    const results = runAgentBasedScan(filteredEnvironment, fileSystemChanges);
     return NextResponse.json(results);
   }
   
   if (pathname === '/api/scan/agentless') {
-    const { selectedResources, fileSystemChanges = [] } = body;
+    const { selectedResources } = body;
     const filteredEnvironment = filterEnvironmentBySelection(globalEnvironment, selectedResources);
     const results = runAgentlessScan(filteredEnvironment, fileSystemChanges);
     return NextResponse.json(results);
