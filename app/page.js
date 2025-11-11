@@ -198,14 +198,19 @@ export default function CloudSecurityComparison() {
       id: Date.now()
     };
     
-    setFileSystemChanges(prev => [...prev, change]);
-    
-    // Auto-trigger agentless scan after a short delay
-    setTimeout(() => {
-      if (agentlessResults) {
-        startAgentlessScan(true);
-      }
-    }, 1000);
+    // Update state with new change and trigger agent-based scan
+    setFileSystemChanges(prev => {
+      const updatedChanges = [...prev, change];
+      
+      // Auto-trigger agent-based scan immediately with the updated changes
+      setTimeout(() => {
+        if (agentBasedResults) {
+          startAgentBasedScan(updatedChanges);
+        }
+      }, 500);
+      
+      return updatedChanges;
+    });
   };
 
   const startBothScans = () => {
