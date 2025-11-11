@@ -541,7 +541,7 @@ module.exports = {
         <CardHeader className="bg-purple-50 dark:bg-purple-950">
           <CardTitle className="flex items-center gap-2">
             <Terminal className="h-6 w-6 text-purple-600" />
-            Agent Scanner - File Security Analysis
+            Agentless Scanner - File Security Analysis
           </CardTitle>
           <CardDescription>
             Upload files for comprehensive security scanning using advanced CLI commands
