@@ -365,7 +365,7 @@ export default function CloudSecurityComparison() {
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        {/* Agent Scanner View */}
+        {/* Agentless Scanner View */}
         {showAgentScanner && (
           <div className="mb-8">
             <AgentScanner />
