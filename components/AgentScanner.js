@@ -554,7 +554,7 @@ module.exports = {
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="agent-scan" className="gap-2">
             <Terminal className="h-4 w-4" />
-            Agent CLI Scanner
+            Agentless CLI Scanner
           </TabsTrigger>
           <TabsTrigger value="file-scan" className="gap-2">
             <Shield className="h-4 w-4" />
@@ -562,7 +562,7 @@ module.exports = {
           </TabsTrigger>
         </TabsList>
 
-        {/* Agent CLI Scanner Tab */}
+        {/* Agentless CLI Scanner Tab */}
         <TabsContent value="agent-scan" className="space-y-6">
           <Card>
             <CardContent className="pt-6">
